@@ -23,52 +23,37 @@
  * SOFTWARE.
  */
 
-package io.korhner.asciimg.image.importer;
+package io.korhner.asciimg.image.converter;
 
-import io.korhner.asciimg.image.matrix.BasicImageMatrixInfo;
-import io.korhner.asciimg.image.matrix.BasicInt1DImageMatrix;
 import io.korhner.asciimg.image.matrix.ImageMatrix;
 import io.korhner.asciimg.image.matrix.ImageMatrixDimensions;
-import io.korhner.asciimg.image.matrix.ImageMatrixInfo;
+import io.korhner.asciimg.image.matrix.ReferencingTiledImageMatrix;
+import io.korhner.asciimg.image.strategy.CharacterFinder;
+import io.korhner.asciimg.image.transformer.ToGrayscaleImageTransformer;
+import io.korhner.asciimg.image.transformer.TruncatingImageTransformer;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Map.Entry;
 
 /**
- * A class used to read/import an image through AWT.
+ * A class used to convert an abstract 32bit ARGB image to an ASCII art.
+ * Output and conversion algorithm are decoupled.
  */
-public class BufferedImageImageImporter implements ImageImporter<BufferedImage, Integer> {
-
-	public static final ImageMatrixInfo META_DATA
-			= new BasicImageMatrixInfo(4, Integer.class, 8);
-	private BufferedImage source;
-
-	@Override
-	public void setSource(final BufferedImage source) {
-		this.source = source;
-	}
-
-	@Override
-	public int getFrames() {
-		return 1;
-	}
-
-	@Override
-	public ImageMatrix<Integer> read() throws IOException {
-
-		if (source == null) {
-			throw new IOException("Input source not set");
-		}
-
-		final ImageMatrixDimensions sourcePixelsSize = new ImageMatrixDimensions(source.getWidth(), source.getHeight());
-
-		// extract pixels from source image
-		final int[] imagePixels = source.getRGB(
-				0, 0,
-				sourcePixelsSize.getWidth(), sourcePixelsSize.getHeight(),
-				null, 0, sourcePixelsSize.getWidth());
-
-		// process the pixels to a gray-scale matrix
-		return new BasicInt1DImageMatrix(META_DATA, imagePixels, sourcePixelsSize.getWidth());
-	}
-}
+//public class BufferedImageToAsciiConverter<O> extends AbstractToAsciiConverter<BufferedImage, O> {
+//
+//	public BufferedImageToAsciiConverter() {}
+//
+//	@Override
+//	public void convert(final BufferedImage source) throws IOException {
+//
+//		getExporter().initFrames(1);
+//
+//		getImporter().setSource(source);
+//		final ImageMatrix input = getImporter().read();
+//
+//		convert(input);
+//
+//		getExporter().finalizeFrames();
+//	}
+//}
